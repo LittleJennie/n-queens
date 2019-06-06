@@ -34,13 +34,16 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = 0; 
 
-  // create board
-  // add chess to board
-  // check conflicts
+  var factorial = function(n) {
+    if (n <= 1) {
+      return 1;
+    }
 
-  // base case:
+    return factorial(n - 1) * n;
+  }
+
+  var solutionCount = factorial(n); 
 
 
 

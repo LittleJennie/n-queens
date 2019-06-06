@@ -200,14 +200,15 @@
       var curCol = minorDiagonalColumnIndexAtFirstRow;
       var startingRow;
 
-      // if (minorDiagonalColumnIndexAtFirstRow > curBoard.length - 1) {
-      //   startingRow = culCol - curBoard.length - 1;
-      // } else {
-      //   startingRow = 0;
-      // }
+      if (minorDiagonalColumnIndexAtFirstRow > curBoard.length - 1) {
+        startingRow = curCol - curBoard.length + 1;
+        curCol = minorDiagonalColumnIndexAtFirstRow - startingRow;
+      } else {
+        startingRow = 0;
+      }
 
       var count = 0;
-      for (var i = rowLength; i < curBoard.length; i++) {
+      for (var i = startingRow; i < curBoard.length; i++) {
         if (curCol >= 0) { // need to check if curCol is valid
           count += curBoard[i][curCol];
           curCol --;
@@ -222,7 +223,18 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var curBoard = this.rows();
+
+      // find absolute starting point
+      var newLength = curBoard.length * 2 - 1;
+
+      for (var i = 0; i < newLength; i ++) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/

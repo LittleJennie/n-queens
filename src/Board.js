@@ -112,7 +112,6 @@
     hasColConflictAt: function(colIndex) {
       var curBoard = this.rows();
       var curColCount = curBoard.reduce(function(accum, cur) {
-        console.log('cur row: ', cur, ' cur col index: ', colIndex, ' curVal: ', cur[colIndex])
         return accum += cur[colIndex];
       }, 0);
 
@@ -135,7 +134,7 @@
         colCount --;
       }
 
-      return false; // fixme
+      return false;
     },
 
 
@@ -145,12 +144,49 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var curBoard  = this.rows();
+      var curCol;
+      var startingRow;
+
+      // if it's positive --> assume starting at row 0;
+      if (majorDiagonalColumnIndexAtFirstRow > 0) {
+        startingRow = 0;
+        curCol = majorDiagonalColumnIndexAtFirstRow;
+      }
+      // if it's negative --> we need to make use of this negative column index to get the starting row --> absolute this index thing
+      else {
+        startingRow = Math.abs(majorDiagonalColumnIndexAtFirstRow);
+        curCol = 0;
+      }
+
+      var count = 0;
+      for (var i = startingRow; i < curBoard.length; i++) {
+        if (curCol < curBoard.length) {
+          count += curBoard[i][curCol];
+          curCol ++;
+        }
+        if (count >= 2) {
+          return true;
+        }
+      } 
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var curBoard = this.rows();
+
+      // find absolute starting point
+      var absStarting = -(curBoard.length - 1);
+
+      for (var i = absStarting; i < curBoard.length; i ++) {
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
+
+      return false;
+
     },
 
 
@@ -160,6 +196,27 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      var curBoard = this.rows();
+      var curCol = minorDiagonalColumnIndexAtFirstRow;
+      var startingRow;
+
+      // if (minorDiagonalColumnIndexAtFirstRow > curBoard.length - 1) {
+      //   startingRow = culCol - curBoard.length - 1;
+      // } else {
+      //   startingRow = 0;
+      // }
+
+      var count = 0;
+      for (var i = rowLength; i < curBoard.length; i++) {
+        if (curCol >= 0) { // need to check if curCol is valid
+          count += curBoard[i][curCol];
+          curCol --;
+        }
+        if (count >= 2) {
+          return true;
+        }
+      }
+
       return false; // fixme
     },
 

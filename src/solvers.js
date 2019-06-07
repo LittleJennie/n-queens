@@ -45,9 +45,12 @@ window.countNRooksSolutions = function(n) {
     }
 
     for (var col = 0; col < n; col ++) {
+      // we go to the next row only if the cur col is zero
       if (colMarker[col] === 0) {
+        // if cur col is zero, then we first mark it as one, then we call recursively
         colMarker[col] = 1;
         hasOneSolution += findSolutionCount(row + 1);
+        // after finding the solution count from current move, toggle back to zero
         colMarker[col] = 0;
       }
     }
@@ -65,7 +68,6 @@ window.countNRooksSolutions = function(n) {
 window.findNQueensSolution = function(n) {
   
   var chessBoard = new Board({n:n});
-  var chessCount = 0;
 
   if (n === 0 || n === 2 || n === 3) {
     return chessBoard.rows();
@@ -74,29 +76,27 @@ window.findNQueensSolution = function(n) {
   }
 
   var findSolution = function (row) {
-    if (row >= n && chessCount === n) {
+    if (row >= n) {
       return chessBoard.rows();
     }
 
     for (var col = 0; col < n; col ++) {
       chessBoard.togglePiece(row, col);
-      chessCount++;
       if (!chessBoard.hasAnyQueensConflicts()) {
         var result = findSolution(row + 1);
+        // eveluate if return result is a chessboard or not, but yes, return the chess board
         if (result !== null) {
           return result;
         }
       }
       chessBoard.togglePiece(row, col);
-      chessCount--;
     }
+
+    // if for loop is done but does not reach last row with valid move, need to return null
     return null;
   }
 
   var solution = findSolution(0); 
-  // solution = solution.pop();
-  // solution = JSON.parse(solution);
-
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
 };

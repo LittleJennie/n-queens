@@ -124,6 +124,9 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      if (this.rows().length === 0) {
+        return false;
+      }
       var curBoard = this.rows();
       var colCount = curBoard[0].length;
 
